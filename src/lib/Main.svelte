@@ -91,7 +91,7 @@
   
   {#if error}
     <br>
-    <p class="text-white-500 bg-red-800 p-2 rounded-xl" transition:fade={{ delay: 250, duration: 100 }}><i>{error}</i></p>
+    <p class="text-white-500 bg-red-200 dark:bg-red-800 p-2 rounded-xl text-center" transition:fade={{ delay: 250, duration: 100 }}><i>{error}</i></p>
     
   {/if}
   
