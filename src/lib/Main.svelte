@@ -148,6 +148,14 @@
 
   function removeFromList(index) {
     todoList = todoList.filter((item, i) => i !== index);
+
+    gamepad.vibrationActuator.playEffect('dual-rumble', {
+        startDelay: 0,
+        duration: 500,
+        weakMagnitude: 1.0,
+        strongMagnitude: 1.0
+      });
+
     // Save updated todoList to localStorage after removing an item
     saveTodoListToLocalStorage();
   }
