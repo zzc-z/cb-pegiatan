@@ -2,6 +2,7 @@
 [![Translation status](https://translate.codeberg.org/widgets/pegiatan/-/pegiatan/svg-badge.svg)](https://translate.codeberg.org/engage/pegiatan/)
 [*Lihat README ini dalam bahasa Indonesia*](https://codeberg.org/Linerly/pegiatan/src/branch/main/README-id.md)
 
+[![Translation status](https://translate.codeberg.org/widgets/dutch/-/dutch/svg-badge.svg)](https://translate.codeberg.org/engage/dutch/)
 [*Lees deze informatie in het Nederlands*](https://codeberg.org/Linerly/pegiatan/src/branch/main/README-nl.md)
 
 ## What is Pegiatan?
