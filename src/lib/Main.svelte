@@ -167,6 +167,21 @@
    }
 </script>
 
+<span class="flex flex-row content-center my-2 select-none">
+  <img width="30" height="30" alt="Pegiatan icon" src="./icons/icon.svg"/>
+  <p class="mx-2"><b>pegiatan</b></p>
+  <div class="ml-auto rounded-full bg-gray-500 py-1"><a class="rounded-full py-1 px-2 dark:text-blue-200 focus:outline-none focus:ring focus:ring-blue-300" href="https://codeberg.org/Linerly/pegiatan" target="_blank" rel="noreferrer">1.0.0</a></div>
+</span>
+
+<span class="flex flex-row content-center my-8 select-none">
+  <span class="flex flex-col content-center">
+    <p>{$_('app.welcome')},</p>
+    <p class="my-2 text-2xl"><b>Guest</b></p>
+  </span>
+  
+  <p class="ml-auto rounded-full bg-gray-500 p-6 px-8 ">0.00</p>
+</span>
+
   <span class="flex flex-col">
       <input class="p-4 rounded-t-xl focusable bg-slate-50 dark:bg-slate-700" bind:value={newItem} type="text" placeholder="{$_('task.create.title')}">
       <input class="p-4 focusable bg-slate-50 dark:bg-slate-700" bind:value={newDescription} type="text" placeholder="{$_('task.create.description')}">
@@ -186,7 +201,7 @@
     {#each todoList as item, index}
       <li transition:fade={{ delay: 250, duration: 300 }} class="bg-slate-100 dark:bg-slate-600 rounded-xl">
         <div class="flex flex-row items-center px-3 py-3">
-          <input class="h-8 w-8 focusable" bind:checked={item.status} type="checkbox">
+          <input class="h-8 w-8 focusable text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" bind:checked={item.status} type="checkbox">
           <p class:checked={item.status} class="text-3xl px-3"><b>{item.text}</b></p>
           {#await item.status then}
             <script lang="ts">
@@ -202,7 +217,8 @@
       <br/>
     {/each}
     {#if todoList == false}
-    <div transition:fade={{ delay: 250, duration: 300 }} class="flex flex-col items-center">
+    <div transition:fade={{ delay: 250, duration: 300 }} class="flex flex-col items-center select-none">
+      <img class="my-8" alt="No tasks" src="./assets/no-tasks.svg"/>
       <p class="select-none text-xl"><b>{$_('task.empty.title')}</b></p>
       <p class="select-none"><i>{$_('task.empty.description')}</i></p>
     </div>

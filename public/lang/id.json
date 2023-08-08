@@ -6,7 +6,8 @@
   "task.create.description": "Tambahkan deskripsi...",
   "task.create.title": "Tambahkan tugas baru...",
   "task.empty.title": "Kamu belum menambahkan tugas",
-  "task.empty.description": "Bukankah kamu punya sesuatu untuk dilakukan?",
+  "task.empty.description": "Kamu punya hal-hal yang harus dilakukan, bukan?",
   "gamepad.confirm": "Konfirmasi",
-  "gamepad.navigate": "Navigasi"
+  "gamepad.navigate": "Navigasi",
+  "app.welcome": "Selamat datang"
 }

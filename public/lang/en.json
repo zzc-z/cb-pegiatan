@@ -8,5 +8,6 @@
   "task.empty.title": "You don't have a task yet",
   "task.empty.description": "Don't you have things to do?",
   "gamepad.navigate": "Navigate",
-  "gamepad.confirm": "CONFIRM"
+  "gamepad.confirm": "CONFIRM",
+  "app.welcome": "Welcome"
 }
