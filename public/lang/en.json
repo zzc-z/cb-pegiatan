@@ -1,13 +1,13 @@
 {
-  "error.description": "Please provide a description for the new task.",
-  "error.title": "Please provide a title for the new task.",
-  "task.create.title": "Add a new task...",
-  "task.create.description": "Add a description...",
-  "add": "Add",
-  "delete": "Delete",
-  "task.empty.title": "You don't have a task yet",
-  "task.empty.description": "Don't you have things to do?",
-  "gamepad.navigate": "Navigate",
-  "gamepad.confirm": "CONFIRM",
-  "app.welcome": "Welcome"
+    "error.description": "Please provide a description for the new task.",
+    "error.title": "Please provide a title for the new task.",
+    "task.create.title": "Add a new task…",
+    "task.create.description": "Add a description…",
+    "add": "Add",
+    "delete": "Delete",
+    "task.empty.title": "You don't have a task yet",
+    "task.empty.description": "Don't you have things to do?",
+    "gamepad.navigate": "Navigate",
+    "gamepad.confirm": "CONFIRM",
+    "app.welcome": "Welcome"
 }
