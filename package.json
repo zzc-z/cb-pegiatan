@@ -27,6 +27,7 @@
     "@babichjacob/svelte-localstorage": "^1.0.1",
     "@klarr-agency/circum-icons-svelte": "^2.0.1",
     "@supabase/supabase-js": "^2.32.0",
+    "@vite-pwa/assets-generator": "^0.0.4",
     "svelte-i18n": "^3.7.0"
   }
 }

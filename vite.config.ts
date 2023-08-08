@@ -19,26 +19,26 @@ export default defineConfig({
         scope: './',
         description: 'Turn your tasks into quests.',
         lang: 'en',
-        theme_color: '#051730',
-        background_color: '#000000',
+        theme_color: '#fefefe',
+        background_color: '#ffffff',
         display: 'standalone',
         orientation: 'any',
         icons: [
           {
-            src: 'icons/icon-192.png',
+            src: 'icons/pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: 'icons/icon-512.png',
+            src: 'icons/pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: 'icons/masked-icon.png',
-            sizes: '192x192',
+            src: 'icons/maskable-icon-512x512.png',
+            sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable'
           }
