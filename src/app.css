@@ -90,7 +90,7 @@ button:focus-visible {
   font-family: 'Dosis';
   font-style: normal;
   font-weight: 400;
-  src: url('./fonts/dosis-v27-latin-regular.woff2') format('woff2');
+  src: url('/fonts/dosis-v27-latin-regular.woff2') format('woff2');
 }
 
 /* dosis-700 - latin */
@@ -99,5 +99,5 @@ button:focus-visible {
   font-family: 'Dosis';
   font-style: normal;
   font-weight: 700;
-  src: url('./fonts/dosis-v27-latin-700.woff2') format('woff2');
+  src: url('/fonts/dosis-v27-latin-700.woff2') format('woff2');
 }
