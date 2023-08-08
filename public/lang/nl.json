@@ -1,1 +1,13 @@
-{}
+{
+    "error.description": "Voer een omschrĳving in.",
+    "error.title": "Geef de taak een naam.",
+    "delete": "Verwijderen",
+    "task.empty.title": "Er zĳn nog geen taken",
+    "task.empty.description": "Heb je niets te doen?",
+    "gamepad.navigate": "Navigeren",
+    "gamepad.confirm": "OKÉ",
+    "app.welcome": "Welkom",
+    "task.create.title": "Taak toevoegen…",
+    "task.create.description": "Omschrĳving toevoegen…",
+    "add": "Toevoegen"
+}
