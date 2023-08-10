@@ -9,4 +9,4 @@ Let op: de app is nog volop in ontwikkeling.
 ## Vertalen
 Help met vertalen op Codeberg Translate!
 
-[![Translation status](https://translate.codeberg.org/widgets/pegiatan/-/pegiatan/multi-auto.svg)](https://translate.c
+![Translation status](https://translate.codeberg.org/widgets/pegiatan/-/pegiatan/multi-auto.svg)
