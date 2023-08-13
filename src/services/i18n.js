@@ -1,20 +1,29 @@
-import { derived } from 'svelte/store';
-import { dictionary, locale, getLocaleFromNavigator, _ } from 'svelte-i18n';
+import { derived } from "svelte/store";
+import { dictionary, locale, getLocaleFromNavigator, _ } from "svelte-i18n";
 
-const MESSAGE_FILE_URL_TEMPLATE = './lang/' + navigator.language.split("-")[0] + '.json';
+const MESSAGE_FILE_URL_TEMPLATE =
+  "./lang/" + navigator.language.split("-")[0] + ".json";
 
-function setupI18n({ withLocale: _locale } = { withLocale: getLocaleFromNavigator() }) {
-    const messsagesFileUrl = MESSAGE_FILE_URL_TEMPLATE.replace('{locale}', _locale);
+function setupI18n(
+  { withLocale: _locale } = { withLocale: getLocaleFromNavigator() }
+) {
+  const messsagesFileUrl = MESSAGE_FILE_URL_TEMPLATE.replace(
+    "{locale}",
+    _locale
+  );
 
-    return fetch(messsagesFileUrl)
-        .then(response => response.json())
-        .then((messages) => {
-            dictionary.set({ [_locale]: messages });
+  return fetch(messsagesFileUrl)
+    .then((response) => response.json())
+    .then((messages) => {
+      dictionary.set({ [_locale]: messages });
 
-            locale.set(_locale);
-        });   
+      locale.set(_locale);
+    });
 }
 
-const isLocaleLoaded = derived(locale, $locale => typeof $locale === 'string');
+const isLocaleLoaded = derived(
+  locale,
+  ($locale) => typeof $locale === "string"
+);
 
 export { _, setupI18n, isLocaleLoaded, getLocaleFromNavigator };

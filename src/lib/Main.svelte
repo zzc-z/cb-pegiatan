@@ -1,33 +1,39 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { fade } from 'svelte/transition';
-  import { _ } from '../services/i18n';
+  import { onMount } from "svelte";
+  import { fade } from "svelte/transition";
+  import { _ } from "../services/i18n";
   import CircumIcon from "@klarr-agency/circum-icons-svelte";
-  import GamepadIndicator from './GamepadIndicator.svelte';
-  
+  import GamepadIndicator from "./GamepadIndicator.svelte";
+  import Dialog from "./Dialog.svelte";
 
-  let newItem = '';
-  let newDescription = '';
-  let error = '';
+  let userName = "";
+  let dialog;
+  let newItem = "";
+  let newDescription = "";
+  let error = "";
   let gamepad;
   let focusedElementIndex = 0; // Index of the currently focused element
   let elements;
   let aButtonWasPressed;
+
+  function saveName() {
+    localStorage.setItem("userName", userName);
+  }
 
   // Add a flag to track if we have already moved focus
   let hasMovedFocus = false;
 
   onMount(() => {
     // Check if the browser supports the Gamepad API
-    if (!('getGamepads' in navigator)) {
-      console.error('Gamepad API is not supported in this browser.');
+    if (!("getGamepads" in navigator)) {
+      console.error("Gamepad API is not supported in this browser.");
       return;
     }
 
-    console.log('Gamepad API is supported.');
+    console.log("Gamepad API is supported.");
 
     // Get the list of focusable elements
-    elements = document.querySelectorAll('.focusable');
+    elements = document.querySelectorAll(".focusable");
 
     // Start polling the gamepad state
     requestAnimationFrame(pollGamepad);
@@ -55,16 +61,16 @@
         // Move focus downward
         hasMovedFocus = true;
         handleNavigation(1);
-        console.log('down');
+        console.log("down");
         playNavigationSound();
       } else if (yAxis < -0.5 && !hasMovedFocus) {
         // Move focus upward
         hasMovedFocus = true;
         handleNavigation(-1);
-        console.log('up');
+        console.log("up");
         playNavigationSound();
       }
-      
+
       // Handle A button press as Enter key press
       if (aButton.pressed && !aButtonWasPressed) {
         elements[focusedElementIndex]?.click();
@@ -80,7 +86,8 @@
   }
 
   function handleNavigation(direction) {
-    focusedElementIndex = (focusedElementIndex + direction + elements.length) % elements.length;
+    focusedElementIndex =
+      (focusedElementIndex + direction + elements.length) % elements.length;
     elements[focusedElementIndex]?.focus();
   }
 
@@ -114,14 +121,14 @@
     // Check if both title and description are empty
     if (!trimmedTitle && !trimmedDescription) {
       // Prevent adding empty to-do items
-      error = ''
+      error = "";
       return;
     }
 
     // Check if only the title is provided
     if (trimmedTitle && !trimmedDescription) {
       // Ask the user to provide the description as well
-      error = $_('error.description')
+      error = $_("error.description");
       document.getElementById("errorSound")?.play();
       return;
     }
@@ -129,7 +136,7 @@
     // Check if only the description is provided
     if (!trimmedTitle && trimmedDescription) {
       // Ask the user to provide the title as well
-      error = $_('error.title')
+      error = $_("error.title");
       document.getElementById("errorSound")?.play();
       return;
     }
@@ -137,10 +144,13 @@
     document.getElementById("addSound")?.play();
 
     // If both title and description are provided, add the new task
-    error = ''
-    todoList = [...todoList, { text: trimmedTitle, description: trimmedDescription, status: false }];
-    newItem = '';
-    newDescription = ''; // Clear the input fields after adding a new task
+    error = "";
+    todoList = [
+      ...todoList,
+      { text: trimmedTitle, description: trimmedDescription, status: false },
+    ];
+    newItem = "";
+    newDescription = ""; // Clear the input fields after adding a new task
 
     // Save updated todoList to localStorage after adding an item
     saveTodoListToLocalStorage();
@@ -149,91 +159,239 @@
   function removeFromList(index) {
     todoList = todoList.filter((item, i) => i !== index);
 
-    gamepad.vibrationActuator.playEffect('dual-rumble', {
-        startDelay: 0,
-        duration: 500,
-        weakMagnitude: 1.0,
-        strongMagnitude: 1.0
-      });
+    gamepad.vibrationActuator.playEffect("dual-rumble", {
+      startDelay: 0,
+      duration: 500,
+      weakMagnitude: 1.0,
+      strongMagnitude: 1.0,
+    });
 
     // Save updated todoList to localStorage after removing an item
     saveTodoListToLocalStorage();
   }
 
   function playNavigationSound() {
-     const navigationSound = new Audio("/sfx/navigate.ogg");
-     navigationSound.currentTime = 0; // Reset playback position to start from the beginning
-     navigationSound.play();
-   }
+    const navigationSound = new Audio("/sfx/navigate.ogg");
+    navigationSound.currentTime = 0; // Reset playback position to start from the beginning
+    navigationSound.play();
+  }
+
+  function exportToJson() {
+    const jsonContent = JSON.stringify(todoList);
+    const blob = new Blob([jsonContent], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "todo-list.json";
+    link.click();
+  }
+
+  function importFromJson(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const importedData = JSON.parse(event.target.result);
+        todoList = importedData;
+      };
+      reader.readAsText(file);
+    }
+  }
+
+  function exportToCsv() {
+    const csvContent =
+      "data:text/csv;charset=utf-8," + encodeURIComponent(todoListToCsv());
+    const link = document.createElement("a");
+    link.href = csvContent;
+    link.download = "todo-list.csv";
+    link.click();
+  }
+
+  function todoListToCsv() {
+    const header = ["Task", "Description", "Status"];
+    const rows = todoList.map((item) => [
+      item.text,
+      item.description,
+      item.status ? "Complete" : "Incomplete",
+    ]);
+    return [header, ...rows].map((row) => row.join(",")).join("\n");
+  }
 </script>
 
 <span class="flex flex-row content-center my-2 select-none">
-  <img width="30" height="30" alt="Pegiatan icon" src="./icons/icon.svg"/>
+  <img width="30" height="30" alt="Pegiatan icon" src="./icons/icon.svg" />
   <p class="mx-2"><b>pegiatan</b></p>
-  <div class="ml-auto rounded-full bg-gray-500 py-1"><a class="rounded-full py-1 px-2 dark:text-blue-200 focus:outline-none focus:ring focus:ring-blue-300" href="https://codeberg.org/Linerly/pegiatan" target="_blank" rel="noreferrer">1.0.0</a></div>
+  <button
+    on:click={() => dialog.showModal()}
+    aria-label={$_("app.settings")}
+    class="ml-auto rounded-full bg-gray-500 py-1 px-2"
+    ><CircumIcon name="settings" size="16" /></button
+  >
+  <div class="ml-1 rounded-full bg-gray-500 py-1">
+    <a
+      class="rounded-full py-1 px-2 dark:text-blue-200 focus:outline-none focus:ring focus:ring-blue-300"
+      href="https://codeberg.org/Linerly/pegiatan"
+      target="_blank"
+      rel="noreferrer">1.0.0</a
+    >
+  </div>
 </span>
+
+<Dialog bind:dialog on:close={() => console.log("closed")}>
+  <p class="text-3xl"><b>{$_("app.settings")}</b></p>
+  <br />
+
+  <div class="bg-slate-200 dark:bg-slate-800 p-2 rounded-xl">
+    <p class="text-2xl"><b>{$_("app.settings.you")}</b></p>
+    <hr class="my-2" />
+    <form class="flex flex-col my-2" on:submit|preventDefault={saveName}>
+      <label for="name">{$_("app.settings.you.name")}</label>
+      <p><b>{$_("app.settings.you.reload")}</b></p>
+      <input
+        class="my-2 rounded-full"
+        type="text"
+        id="name"
+        bind:value={userName}
+        required
+      />
+      <button class="uppercase rounded-full" type="submit">Save</button>
+    </form>
+  </div>
+  <br />
+  <div class="bg-slate-200 dark:bg-slate-800 p-2 rounded-xl">
+    <p class="text-2xl my-2"><b>{$_("app.settings.data")}</b></p>
+    <hr class="my-2" />
+    <div class="flex flex-col">
+      <label for="file" class="text-2xl"
+        >{$_("app.settings.data.import_backup")}
+        <code class="bg-slate-300 dark:bg-slate-700">JSON</code></label
+      >
+      <p><b>{$_("app.settings.data.overwrite")}</b></p>
+      <input
+        class="my-2"
+        type="file"
+        accept=".json"
+        on:change={importFromJson}
+      />
+    </div>
+
+    <p class="text-2xl my-2">{$_("app.settings.data.export_data")}</p>
+    <button class="p-3 my-2 rounded-xl" on:click={exportToCsv}
+      >{$_("app.settings.data.export_data.tasks")}
+      <code class="bg-slate-300 dark:bg-slate-700">CSV</code></button
+    >
+    <button class="p-3 my-2 rounded-xl" on:click={exportToJson}
+      >{$_("app.settings.data.export_data.backup")}
+      <code class="bg-slate-300 dark:bg-slate-700">JSON</code></button
+    >
+  </div>
+</Dialog>
 
 <span class="flex flex-row content-center my-8 select-none">
   <span class="flex flex-col content-center">
-    <p>{$_('app.welcome')},</p>
-    <p class="my-2 text-2xl"><b>Guest</b></p>
+    <p>{$_("app.welcome")},</p>
+    <p class="my-2 text-2xl">
+      <b>{localStorage.getItem("userName") || "Guest"}</b>
+    </p>
   </span>
-  
-  <p class="ml-auto rounded-full bg-gray-500 p-6 px-8 ">0.00</p>
+
+  <p class="ml-auto rounded-full bg-gray-500 p-6 px-8">0.00</p>
 </span>
 
-  <span class="flex flex-col">
-      <input class="p-4 rounded-t-xl focusable bg-slate-50 dark:bg-slate-700" bind:value={newItem} type="text" placeholder="{$_('task.create.title')}">
-      <input class="p-4 focusable bg-slate-50 dark:bg-slate-700" bind:value={newDescription} type="text" placeholder="{$_('task.create.description')}">
-      <button class="flex-row content-center w-full p-2 rounded-b-xl px-auto focusable" on:click={addToList}><span class="flex content-center"><CircumIcon class="mx-2" name="square_plus"/><p class="p-1 uppercase">{$_('add')}</p></span></button>
-  </span>
-  
-  
-  {#if error}
-    <br>
-    <p class="select-none text-white-500 bg-red-200 dark:bg-red-800 p-2 rounded-xl text-center" transition:fade={{ delay: 250, duration: 100 }}><i>{error}</i></p>
-    
-  {/if}
-  
-  <br/>
-  
-  <ul class="focusable">
-    {#each todoList as item, index}
-      <li transition:fade={{ delay: 250, duration: 300 }} class="bg-slate-100 dark:bg-slate-600 rounded-xl">
-        <div class="flex flex-row items-center px-3 py-3">
-          <input class="h-8 w-8 focusable text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" bind:checked={item.status} type="checkbox">
-          <p class:checked={item.status} class="text-3xl px-3"><b>{item.text}</b></p>
-          {#await item.status then}
-            <script lang="ts">
-              completeSound = document.getElementById("completeSound") as HTMLAudioElement;
-              completeSound.currentTime = 0; // Reset playback position to start from the beginning
-              completeSound.play();
-            </script>
-          {/await}
-        </div>
-        <p class:checked={item.status} class="text-xl px-3 py-2"><i>{item.description}</i></p>
-        <button class="flex-row content-center w-full p-2 rounded-b-xl px-auto focusable" on:click={() => removeFromList(index)}><span class="flex content-center"><CircumIcon name="square_remove"/><p class="p-1 uppercase">{$_('delete')}</p></span></button>
-      </li>
-      <br/>
-    {/each}
-    {#if todoList == false}
-    <div transition:fade={{ delay: 250, duration: 300 }} class="flex flex-col items-center select-none">
-      <img class="my-8" alt="No tasks" src="./assets/no-tasks.svg"/>
-      <p class="select-none text-xl"><b>{$_('task.empty.title')}</b></p>
-      <p class="select-none"><i>{$_('task.empty.description')}</i></p>
-    </div>
-    {/if}
-  </ul>
+<span class="flex flex-col">
+  <input
+    class="p-4 rounded-t-xl focusable bg-slate-50 dark:bg-slate-700"
+    bind:value={newItem}
+    type="text"
+    placeholder={$_("task.create.title")}
+  />
+  <input
+    class="p-4 focusable bg-slate-50 dark:bg-slate-700"
+    bind:value={newDescription}
+    type="text"
+    placeholder={$_("task.create.description")}
+  />
+  <button
+    class="flex-row content-center w-full p-2 rounded-b-xl px-auto focusable"
+    on:click={addToList}
+    ><span class="flex content-center"
+      ><CircumIcon class="mx-2" name="square_plus" />
+      <p class="p-1 uppercase">{$_("add")}</p></span
+    ></button
+  >
+</span>
 
+{#if error}
+  <br />
+  <p
+    class="select-none text-white-500 bg-red-200 dark:bg-red-800 p-2 rounded-xl text-center"
+    transition:fade={{ delay: 250, duration: 100 }}
+  >
+    <i>{error}</i>
+  </p>
+{/if}
+
+<br />
+
+<ul class="focusable">
+  {#each todoList as item, index}
+    <li
+      transition:fade={{ delay: 250, duration: 300 }}
+      class="bg-slate-100 dark:bg-slate-600 rounded-xl"
+    >
+      <div class="flex flex-row items-center px-3 py-3">
+        <input
+          class="h-8 w-8 focusable text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+          bind:checked={item.status}
+          type="checkbox"
+        />
+        <p class:checked={item.status} class="text-3xl px-3">
+          <b>{item.text}</b>
+        </p>
+        {#await item.status then}
+          <script lang="ts">
+            completeSound = document.getElementById(
+              "completeSound"
+            ) as HTMLAudioElement;
+            completeSound.currentTime = 0; // Reset playback position to start from the beginning
+            completeSound.play();
+          </script>
+        {/await}
+      </div>
+      <p class:checked={item.status} class="text-xl px-3 py-2">
+        <i>{item.description}</i>
+      </p>
+      <button
+        class="flex-row content-center w-full p-2 rounded-b-xl px-auto focusable"
+        on:click={() => removeFromList(index)}
+        ><span class="flex content-center"
+          ><CircumIcon name="square_remove" />
+          <p class="p-1 uppercase">{$_("delete")}</p></span
+        ></button
+      >
+    </li>
+    <br />
+  {/each}
+  {#if todoList == false}
+    <div
+      transition:fade={{ delay: 250, duration: 300 }}
+      class="flex flex-col items-center select-none"
+    >
+      <img class="my-8" alt="No tasks" src="./assets/no-tasks.svg" />
+      <p class="select-none text-xl"><b>{$_("task.empty.title")}</b></p>
+      <p class="select-none"><i>{$_("task.empty.description")}</i></p>
+    </div>
+  {/if}
+</ul>
 
 <audio id="newSound">
-  <source src="/sfx/new.ogg" type="audio/ogg">
+  <source src="/sfx/new.ogg" type="audio/ogg" />
 </audio>
 <audio id="completeSound">
-  <source src="/sfx/complete.ogg" type="audio/ogg">
+  <source src="/sfx/complete.ogg" type="audio/ogg" />
 </audio>
 <audio id="errorSound">
-  <source src="/sfx/error.ogg" type="audio/ogg">
+  <source src="/sfx/error.ogg" type="audio/ogg" />
 </audio>
 
 <GamepadIndicator {gamepad} />
