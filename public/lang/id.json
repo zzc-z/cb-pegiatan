@@ -19,5 +19,11 @@
   "app.settings.data.overwrite": "(ini akan menimpa basis datanya!)",
   "app.settings.data.export_data": "Ekspor Data",
   "app.settings.data.export_data.tasks": "Ekspor Tugas",
-  "app.dialog.close": "Tutup"
+  "app.dialog.close": "Tutup",
+  "app.settings.you.save": "Simpan",
+  "app.settings.data.export_data.backup": "Ekspor Cadangan",
+  "app.welcome.afternoon": "Selamat siang",
+  "app.welcome.evening": "Selamat sore",
+  "app.welcome.morning": "Selamat pagi",
+  "app.welcome.night": "Selamat malam"
 }

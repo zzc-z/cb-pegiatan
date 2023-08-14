@@ -20,5 +20,10 @@
   "app.settings.data.export_data": "Export Data",
   "app.settings.data.export_data.tasks": "Export Tasks",
   "app.settings.data.export_data.backup": "Export Backup",
-  "app.dialog.close": "Close"
+  "app.dialog.close": "Close",
+  "app.settings.you.save": "Save",
+  "app.welcome.morning": "Good morning",
+  "app.welcome.afternoon": "Good afternoon",
+  "app.welcome.evening": "Good evening",
+  "app.welcome.night": "Good night"
 }
