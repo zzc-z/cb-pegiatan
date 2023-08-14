@@ -20,5 +20,11 @@
     "app.settings.data.export_data.tasks": "Taken exporteren",
     "app.settings.data.export_data.backup": "Reservekopie exporteren",
     "app.dialog.close": "Sluiten",
-    "app.settings.you.reload": "(herlaad de pagina om toe te passen)"
+    "app.settings.you.reload": "(herlaad de pagina om toe te passen)",
+    "app.settings.you.save": "Opslaan",
+    "app.welcome.morning": "Goedemorgen",
+    "app.welcome.afternoon": "Goedemiddag",
+    "app.welcome.evening": "Goedenavond",
+    "app.welcome.night": "Goedenacht",
+    "app.settings.you.name.placeholder": "Voer je naam in…"
 }
