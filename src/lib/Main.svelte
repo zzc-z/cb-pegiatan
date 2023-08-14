@@ -17,7 +17,6 @@
   let focusedElementIndex = 0; // Index of the currently focused element
   let elements;
   let aButtonWasPressed;
-  let tasksToNextLevel = 3;
 
   function saveName() {
     localStorage.setItem("userName", userName);
@@ -193,12 +192,18 @@
   }
 
   function exportToJson() {
-    const jsonContent = JSON.stringify(todoList);
-    const blob = new Blob([jsonContent], { type: "application/json" });
+    const dataToExport = {
+      tasks: todoList,
+      completedTasks: completedTasks, // Include the completedTasks count
+      userName,
+    };
+
+    const jsonData = JSON.stringify(dataToExport);
+    const blob = new Blob([jsonData], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "pegiatan-backup-" + Date.now() + ".json";
+    link.download = "pegiatan-" + Date.now() + ".json";
     link.click();
   }
 
@@ -208,7 +213,19 @@
       const reader = new FileReader();
       reader.onload = (event) => {
         const importedData = JSON.parse(event.target.result);
-        todoList = importedData;
+        if (importedData && Array.isArray(importedData.tasks)) {
+          todoList = importedData.tasks;
+          completedTasks = importedData.completedTasks; // Set the completedTasks count
+          userName = importedData.userName;
+
+          // Save updated data to localStorage
+          localStorage.setItem("todoList", JSON.stringify(todoList));
+          localStorage.setItem("completedTasks", completedTasks.toString());
+          localStorage.setItem("userName", userName);
+
+          // Reload the page to reflect the changes
+          location.reload();
+        }
       };
       reader.readAsText(file);
     }
@@ -219,7 +236,7 @@
       "data:text/csv;charset=utf-8," + encodeURIComponent(todoListToCsv());
     const link = document.createElement("a");
     link.href = csvContent;
-    link.download = "todo-list-" + Date.new() + ".csv";
+    link.download = "todo-list-" + Date.now() + ".csv";
     link.click();
   }
 
@@ -407,8 +424,13 @@
 <br />
 
 <ul class="focusable">
-  {#each todoList as item, index}
-    <li transition:fade class="bg-slate-100 dark:bg-slate-600 rounded-xl">
+  {#each todoList.reverse() as item, index}
+    <li
+      transition:fade
+      class="bg-slate-100 dark:bg-slate-600 rounded-xl {item.status
+        ? 'text-gray-300 dark:text-gray-500 dark:bg-gray-800'
+        : ''}"
+    >
       <div class="flex flex-row items-center px-3 py-3">
         <input
           class="h-8 w-8 focusable text-indigo-600 border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
@@ -430,14 +452,16 @@
       <p class:checked={item.status} class="text-xl px-3 py-2">
         <i>{item.description}</i>
       </p>
-      <button
-        class="flex-row content-center w-full p-2 rounded-b-xl px-auto focusable focus:outline-none focus:ring focus:ring-blue-300"
-        on:click={() => removeFromList(index)}
-        ><span class="flex content-center"
-          ><CircumIcon name="square_remove" />
-          <p class="p-1 uppercase">{$_("delete")}</p></span
-        ></button
-      >
+      {#if !item.status}
+        <button
+          class="flex-row content-center w-full p-2 rounded-b-xl px-auto focusable focus:outline-none focus:ring focus:ring-blue-300"
+          on:click={() => removeFromList(index)}
+          ><span class="flex content-center"
+            ><CircumIcon name="square_remove" />
+            <p class="p-1 uppercase">{$_("delete")}</p></span
+          ></button
+        >
+      {/if}
     </li>
     <br />
   {/each}
