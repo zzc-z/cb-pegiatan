@@ -322,9 +322,10 @@
       <label for="name">{$_("app.settings.you.name")}</label>
       <p><b>{$_("app.settings.you.reload")}</b></p>
       <input
-        class="my-2 rounded-full focus:outline-none focus:ring focus:ring-blue-300"
+        class="my-2 p-2 rounded-full focus:outline-none focus:ring focus:ring-blue-300"
         type="text"
         id="name"
+        placeholder={$_("app.settings.you.name.placeholder")}
         bind:value={userName}
         required
       />

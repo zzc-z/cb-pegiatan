@@ -25,5 +25,6 @@
   "app.welcome.morning": "Good morning",
   "app.welcome.afternoon": "Good afternoon",
   "app.welcome.evening": "Good evening",
-  "app.welcome.night": "Good night"
+  "app.welcome.night": "Good night",
+  "app.settings.you.name.placeholder": "Enter your name here…"
 }

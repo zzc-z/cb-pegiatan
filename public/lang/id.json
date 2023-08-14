@@ -25,5 +25,6 @@
   "app.welcome.afternoon": "Selamat siang",
   "app.welcome.evening": "Selamat sore",
   "app.welcome.morning": "Selamat pagi",
-  "app.welcome.night": "Selamat malam"
+  "app.welcome.night": "Selamat malam",
+  "app.settings.you.name.placeholder": "Masukkan namamu di sini…"
 }
