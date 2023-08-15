@@ -22,7 +22,7 @@ export default defineConfig({
         short_name: "Pegiatan",
         start_url: "./",
         scope: "./",
-        description: "Turn your tasks into quests.",
+        description: "Turn your tasks into quests!",
         lang: "en",
         theme_color: "#fefefe",
         background_color: "#ffffff",
@@ -48,6 +48,28 @@ export default defineConfig({
             purpose: "maskable",
           },
         ],
+        screenshots: [
+          {
+            src: 'assets/screenshot1.png',
+            sizes: '360x800',
+            type: 'image/png'
+          },
+          {
+            src: 'assets/screenshot2.png',
+            sizes: '360x800',
+            type: 'image/png'
+          },
+          {
+            src: 'assets/screenshot3.png',
+            sizes: '360x800',
+            type: 'image/png'
+          },
+          {
+            src: 'assets/screenshot4.png',
+            sizes: '360x800',
+            type: 'image/png'
+          }
+        ]
       },
     }),
   ],
