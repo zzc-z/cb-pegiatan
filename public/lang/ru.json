@@ -15,7 +15,7 @@
     "app.settings.you.name": "Введите свое имя",
     "app.settings.you.reload": "(перезагрузите страницу чтобы увидеть изменения)",
     "app.settings.data": "Управление данными",
-    "app.settings.data.import_backup": "Импортировать сохранение",
+    "app.settings.data.import_backup": "Импортировать резервную копию",
     "app.settings.data.overwrite": "(это перепишет базу данных!)",
     "app.settings.data.export_data": "Экспортировать данные",
     "app.settings.data.export_data.tasks": "Экспортировать задания",
